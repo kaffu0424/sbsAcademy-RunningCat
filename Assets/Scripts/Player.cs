@@ -17,27 +17,36 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        animator.SetFloat("speed", Global.ScrollSpeed);
         MainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
         runEffect.SetActive(false);
     }
 
 	void Update ()
     {
+
         speedSlider.value = Global.ScrollSpeed / limitSpeed;
         speedText.text = Global.ScrollSpeed.ToString("00");        
         distance+= (Global.ScrollSpeed*0.01f);
         distanceText.text = distance + "m";
         progressSlider.value = distance / GameManager.instance.goalDistance;
 
-        if(distance>=GameManager.instance.goalDistance)
+        animator.SetFloat("speed", Global.ScrollSpeed);
+        if (distance >= GameManager.instance.goalDistance)
         {
             GameManager.instance.finalScore = score;
             GameManager.instance.StageClear();
         }
 
+
+        if(Input.GetMouseButton(1))
+        {
+            Global.ScrollSpeed = 0f;
+        }
+
         if (Input.GetMouseButton(0))
         {
-            animator.SetBool("FastRun", true);
+            //animator.SetBool("FastRun", true);
             runEffect.SetActive(true);
 
             if (GetComponent<Rigidbody>().velocity.y == 0)
@@ -54,8 +63,8 @@ public class Player : MonoBehaviour
             if (click)
             {               
                 GetComponent<Rigidbody>().AddForce(Vector3.up * Global.ScrollSpeed * 50f);
-                animator.SetBool("Jump", true);
-                animator.SetBool("FastRun", false);
+                //animator.SetBool("Jump", true);
+                //animator.SetBool("FastRun", false);
             }
 
             if (Global.ScrollSpeed > 10f)
@@ -63,14 +72,14 @@ public class Player : MonoBehaviour
                 Global.ScrollSpeed -= 10f * Time.deltaTime;
             }
             click = false;
-            animator.SetBool("FastRun", false);
+            //animator.SetBool("FastRun", false);
             runEffect.SetActive(false);
         }
 
-        if(Global.ScrollSpeed<1)
-        {
-            Global.ScrollSpeed = 1; //최저값 제한
-        }
+        //if(Global.ScrollSpeed<1)
+        //{
+        //    Global.ScrollSpeed = 1; //최저값 제한
+        //}
 
         if (Global.ScrollSpeed >= 10f)
             MainCamera.fieldOfView = 80f + ((Global.ScrollSpeed - 10f) * 4f);
@@ -84,7 +93,7 @@ public class Player : MonoBehaviour
         if(collision.gameObject.name=="Ground")
         {
             onGround = true;
-            animator.SetBool("Jump", false);
+           //animator.SetBool("Jump", false);
         }
     }
 
